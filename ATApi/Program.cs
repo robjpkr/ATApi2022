@@ -33,11 +33,9 @@ c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo {
     //c.OperationFilter<AuthorizationHeaderParameterOperationFilter>();
 });
 
-
-
-
-
 var app = builder.Build();
+
+app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
