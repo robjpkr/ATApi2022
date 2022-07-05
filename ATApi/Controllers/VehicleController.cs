@@ -2,7 +2,6 @@
 using ATApi.Data.Models;
 using ATApi.Service.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 namespace ATApi.Controllers
 {
@@ -27,14 +26,14 @@ namespace ATApi.Controllers
 
         [HttpGet]
         [Route("GetAll")]
-        public async Task<IActionResult> GetAll([FromHeader(Name = "X-API-Key")][Required] string xApiKey)
+        public async Task<IActionResult> GetAll() //[FromHeader(Name = "X-API-Key")][Required] string xApiKey)
         {
-            if (!xApiKey.Equals(_xapikey))
-            {
-                return Unauthorized();
-            }
-            else
-            {
+            //if (!xApiKey.Equals(_xapikey))
+            //{
+            //    return Unauthorized();
+            //}
+            //else
+            //{
                 var vehicles = await _vehicleService.GetAll();
 
                 if (!vehicles.Any())
@@ -47,19 +46,19 @@ namespace ATApi.Controllers
                 }
 
                 return Ok(vehicles);
-            }
+            //}
         }
 
         [HttpGet]
         [Route("GetById")]
-        public async Task<IActionResult> GetById([FromHeader(Name = "X-API-Key")][Required] string xApiKey, int id)
+        public async Task<IActionResult> GetById(int id)// [FromHeader(Name = "X-API-Key")][Required] string xApiKey, int id)
         {
-            if (!xApiKey.Equals(_xapikey))
-            {
-                return Unauthorized();
-            }
-            else
-            {
+            //if (!xApiKey.Equals(_xapikey))
+            //{
+            //    return Unauthorized();
+            //}
+            //else
+            //{
                 var vehicle = await _vehicleService.GetById(id);
 
                 if (vehicle.VehicleID != id)
@@ -72,19 +71,19 @@ namespace ATApi.Controllers
                 }
 
                 return Ok(vehicle);
-            }
+            //}
         }
 
         [HttpGet]
         [Route("GetMainPageNewVehicles")]
-        public async Task<IActionResult> GetMainPageNewVehicles([FromHeader(Name = "X-API-Key")][Required] string xApiKey)
+        public async Task<IActionResult> GetMainPageNewVehicles() //[FromHeader(Name = "X-API-Key")][Required] string xApiKey)
         {
-            if (!xApiKey.Equals(_xapikey))
-            {
-                return Unauthorized();
-            }
-            else
-            {
+            //if (!xApiKey.Equals(_xapikey))
+            //{
+            //    return Unauthorized();
+            //}
+            //else
+            //{
                 var vehicle =  await _vehicleService.GetMainPageNewVehicles();
 
                 if (vehicle.Count() != Convert.ToInt32(_config.GetValue<string>("MainPageNewVehicleCount")))
@@ -97,6 +96,25 @@ namespace ATApi.Controllers
                 }
 
                 return Ok(vehicle);
+            //}
+        }
+
+        [HttpGet]
+        [Route("GetCountOfVehicles")]
+        public async Task<IActionResult> GetCountOfVehicles()
+        {
+            int count = await _vehicleService.GetCountOfVehicles();
+
+            if (count == 0 )
+            {
+                var exception = new NotFoundException("Not Found",
+                                                      "Records could not be retrieved from server",
+                                                      "VehicleController-GetVehicleCount");
+                return NotFound(exception);
+            }
+            else
+            {
+                return Ok(count);
             }
         }
     }

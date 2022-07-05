@@ -8,6 +8,7 @@ namespace ATApi.Service.Services
         Task<IEnumerable<TEntity>> GetAll();
         Task<TEntity> GetById(int id);
         Task<List<Vehicle>> GetMainPageNewVehicles();
+        Task<int> GetCountOfVehicles();
     }
     public class VehicleService : IVehicleService<Vehicle>
     {
@@ -33,6 +34,11 @@ namespace ATApi.Service.Services
             await Task.WhenAll(tasks);
 
             return vehicles;
+        }
+
+        public async Task<int> GetCountOfVehicles()
+        {
+            return await _vehicleRepository.GetCountOfVehicles();
         }
 
         public async Task<Vehicle> GetById(int id)
