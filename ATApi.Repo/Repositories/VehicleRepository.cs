@@ -80,29 +80,25 @@ namespace ATApi.Repo.Repositories
                               inner join engineinfo e on e.vehicleid = v.vehicleid
                               inner join standardequipment s on s.vehicleid = v.vehicleid
                               inner join dealers d on d.dealerid = v.dealerid 
-                              inner join images i on i.vehicleid = v.vehicleid
                               where v.vehicleid = {id}";
 
                 conn.Open();
-                var vehicle = await conn.QueryAsync<Vehicle, EngineInfo, StandardEquipment, Dealer, Image, Vehicle>(
+                var vehicle = await conn.QueryAsync<Vehicle, EngineInfo, StandardEquipment, Dealer, Vehicle>(
                     sql,
-                    (v, e, s, d, i) =>
+                    (v, e, s, d) =>
                     {
                         Vehicle vehicle;
                         if (!lookup.TryGetValue(v.VehicleID, out vehicle))
                         {
                             lookup.Add(v.VehicleID, vehicle = v);
                         }
-                        if (vehicle.Images == null)
-                        {
-                            vehicle.Images = new List<Image>();
-                        }
+                        vehicle.Images = new List<Image>();
+                        vehicle.Images = GetImagesById(id).Result.ToList();
                         vehicle.EngineInfo = e;
                         vehicle.StandardEquipment = s;
                         vehicle.Dealer = d;
-                        vehicle.Images.Add(i);
                         return v;
-                    }, splitOn: "EngineInfoId, StandardEquipmentId, DealerId, ImageId");
+                    }, splitOn: "EngineInfoId, StandardEquipmentId, DealerId");
 
                 return vehicle.First();
             }

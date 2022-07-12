@@ -56,7 +56,13 @@ namespace ATApi.Service.Services
                             tasks.Add(Task.Run(async () => 
                             vehicles.Add(await _vehicleRepository.GetById(a)))));
 
-            await Task.WhenAll(tasks);
+
+           await Task.WhenAll(tasks);
+
+            if (vehicles.Count != 4)
+            {
+                await GetCountOfVehicles();  //This is pony! Why is the repo call inconsistent??
+            }
 
             return vehicles;
 
