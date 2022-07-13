@@ -145,7 +145,6 @@ namespace ATApi.Repo.Repositories
                 return await conn.QuerySingleAsync<int>("select count(*) from vehicles");
             }
         }
-
         public async Task<IEnumerable<string>> GetMakesOfVehicles()
         {
             using (IDbConnection conn = _conn.Connection())
@@ -154,7 +153,6 @@ namespace ATApi.Repo.Repositories
                 return await conn.QueryAsync<string>($"select distinct make from vehicles");
             }
         }
-
         public async Task<IEnumerable<string>> GetModelsOfMake(string make)
         {
             using (IDbConnection conn = _conn.Connection())
