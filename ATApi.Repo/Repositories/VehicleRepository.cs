@@ -15,6 +15,8 @@ namespace ATApi.Repo.Repositories
         Task<Dealer> GetDealerById(int id);
         Task<IEnumerable<Image>> GetImagesById(int id);
         Task<int> GetCountOfVehicles();
+        Task<IEnumerable<string>> GetMakesOfVehicles(); 
+        Task<IEnumerable<string>> GetModelsOfMake(string make);
     }
 
     public class VehicleRepository : IVehicleRepository
@@ -141,6 +143,24 @@ namespace ATApi.Repo.Repositories
             {
                 conn.Open();
                 return await conn.QuerySingleAsync<int>("select count(*) from vehicles");
+            }
+        }
+
+        public async Task<IEnumerable<string>> GetMakesOfVehicles()
+        {
+            using (IDbConnection conn = _conn.Connection())
+            {
+                conn.Open();
+                return await conn.QueryAsync<string>($"select distinct make from vehicles");
+            }
+        }
+
+        public async Task<IEnumerable<string>> GetModelsOfMake(string make)
+        {
+            using (IDbConnection conn = _conn.Connection())
+            {
+                conn.Open();
+                return await conn.QueryAsync<string>($"select distinct model from vehicles where make = {make}");
             }
         }
     }

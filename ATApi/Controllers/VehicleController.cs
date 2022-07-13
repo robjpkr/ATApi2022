@@ -105,7 +105,7 @@ namespace ATApi.Controllers
         {
             int count = await _vehicleService.GetCountOfVehicles();
 
-            if (count == 0 )
+            if (count == 0)
             {
                 var exception = new NotFoundException("Not Found",
                                                       "Records could not be retrieved from server",
@@ -115,6 +115,44 @@ namespace ATApi.Controllers
             else
             {
                 return Ok(count);
+            }
+        }        
+        
+        [HttpGet]
+        [Route("GetMakesOfVehicles")]
+        public async Task<IActionResult> GetMakesOfvehicles()
+        {
+            var makes = await _vehicleService.GetMakesOfVehicles();
+
+            if (!makes.Any())
+            {
+                var exception = new NotFoundException("Not Found",
+                                                      "Records could not be retrieved from server",
+                                                      "VehicleController-GetMakesOfvehicles");
+                return NotFound(exception);
+            }
+            else
+            {
+                return Ok(makes);
+            }
+        }
+
+        [HttpGet]
+        [Route("GetModelsOfMake")]
+        public async Task<IActionResult> GetModelsOfMake(string make)
+        {
+            var models = await _vehicleService.GetModelsOfMake(make);
+
+            if (!models.Any())
+            {
+                var exception = new NotFoundException("Not Found",
+                                                      "Records could not be retrieved from server",
+                                                      "VehicleController-GetModelsOfMake");
+                return NotFound(exception);
+            }
+            else
+            {
+                return Ok(models);
             }
         }
     }

@@ -9,6 +9,8 @@ namespace ATApi.Service.Services
         Task<TEntity> GetById(int id);
         Task<List<Vehicle>> GetMainPageNewVehicles();
         Task<int> GetCountOfVehicles();
+        Task<List<string>> GetMakesOfVehicles();
+        Task<List<string>> GetModelsOfMake(string make);
     }
     public class VehicleService : IVehicleService<Vehicle>
     {
@@ -89,6 +91,18 @@ namespace ATApi.Service.Services
             } while (numbers.Count != 4);
 
             return numbers;
+        }
+
+        public async Task<List<string>> GetMakesOfVehicles()
+        {
+            var makes =  await _vehicleRepository.GetMakesOfVehicles();
+            return makes.ToList();
+        }
+
+        public async Task<List<string>> GetModelsOfMake(string make)
+        {
+            var models = await _vehicleRepository.GetModelsOfMake(make);
+            return models.ToList();
         }
     }
 }
